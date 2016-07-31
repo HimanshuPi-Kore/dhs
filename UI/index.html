@@ -1,0 +1,72 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<script src="libs/jquery.js" type="text/javascript"></script>
+		<script src="libs/jquery.tmpl.min.js" type="text/javascript"></script>
+		<script src="libs/jquery-ui.min.js" type="text/javascript"></script>
+		<link href="libs/jquery-ui.min.css" rel="stylesheet"></link>
+		
+		<script src="/client/kore-bot-sdk-client.js"></script>
+		<script src="chatWindow.js" type="text/javascript"></script>
+		<link href="chatWindow.css" rel="stylesheet"></link>
+		<script type="text/javascript">
+		$(document).on("ready",function(){
+			function assertion(options, callback) {
+
+				// Client has to fill the claims and call the callback.
+				$.ajax({
+					url: "https://devbots.kore.com/api/users/sts",
+					type: 'post',
+					headers: {
+						Authorization: "bearer zoEO1Pv9s6wvec3yX9gRVhKnMiRS5oCywNtRHhTw-S_AGb81tSLfqJETptHSqKAr"
+					},
+					dataType: 'jsonp',
+					success: function (data) {
+						options.assertion = data.jwt
+						callback(null, options);
+					}
+				})
+			}
+
+			var botOptions = {};
+			botOptions.logLevel = 'debug';
+			botOptions.koreAPIUrl = "https://devbots.kore.com/api/";
+			botOptions.assertionFn = assertion;
+			botOptions.isLoggedIn = false; // false: triggers anonymus flow. set it to true for log-in flow.
+			botOptions.clientId   = "cs-23ffcffe-73f4-5105-b3d1-40754b6d4fb4";
+			botOptions.botInfo =  {name:"DHS AU","_id":"st-2b43561d-5cba-5e37-b416-9057ed7701bc"}; // pass bot name and stream id
+			
+			var chatConfig={
+				botOptions:botOptions
+			};
+
+			koreBotChat().show(chatConfig);
+			$('.openChatWindow').click(function(){
+				koreBotChat().show(chatConfig);
+			});
+		});
+		</script>
+		<!-- <style type="text/css">
+		button.openChatWindow{    
+		    position: fixed;
+		    left: 790px;
+		    top: 58px;
+		    background: #fff;
+		    outline: none;
+		    box-shadow: none;
+		    border: 0;
+		    color: #103193;
+		    font-size: 13px;
+		    cursor: pointer;
+		    font-weight: 600;
+            }
+		</style> -->
+	</head>
+	<body>
+	    <img src="/client/Bots_Platform.png" alt="No Image" style="width: 100%;height: 100%; background-image:norepeat">
+
+		<div id="chatContainer">
+		<button class="openChatWindow">Open Chat Window</button>
+		</div>
+	</body>
+</html>
